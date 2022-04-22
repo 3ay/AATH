@@ -1,0 +1,16 @@
+# Final image needs indy
+FROM streetcred/dotnet-indy:1.15.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+WORKDIR /src
+COPY dotnet/server/DotNet.Backchannel.csproj ./DotNet.Backchannel.csproj
+RUN dotnet restore "DotNet.Backchannel.csproj"
+
+COPY dotnet/server .
+RUN dotnet publish "DotNet.Backchannel.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "DotNet.Backchannel.dll"]

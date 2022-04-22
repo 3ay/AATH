@@ -1,0 +1,55 @@
+name: test-harness-acapy-dotnet
+# RUNSET_NAME: "ACA-PY to AF-.NET"
+# Scope: AIP 1.0
+# Exceptions: Proof Proposals
+#
+# Summary
+#
+# This runset uses the current main branch of ACA-Py for all of the agents except Bob (holder),
+# which uses the master branch of Aries Framework .NET. The runset covers all of the AIP 1.0 tests that 
+# are known to work with the Aries Framework .NET as the holder along with Revocation tests. Excluded 
+# are those tests that involve Proof Proposals.
+#
+# Current
+# 
+# The majority of tests are running and passing. T013-HIPE0011 is failing due to the Aries Framework Dotnet not supporting
+# presentations containing a non-revocation interval, with a non-revocable credential. This issue is being tracked in 
+# https://github.com/hyperledger/aries-framework-dotnet/issues/184
+# 
+# *Status Note Updated: 2021.04.08*
+#
+# End
+on:
+  workflow_dispatch:
+defaults:
+  run:
+    shell: bash
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      LEDGER_URL_CONFIG: "http://localhost:9000"
+      TAILS_SERVER_URL_CONFIG: "http://localhost:6543"
+    steps:
+      - name: checkout-test-harness
+        uses: actions/checkout@v2
+        with:
+          path: test-harness
+      - name: run-von-network
+        uses: ./test-harness/actions/run-von-network
+      - name: run-indy-tails-server
+        uses: ./test-harness/actions/run-indy-tails-server
+      - name: run-test-harness-wo-reports
+        uses: ./test-harness/actions/run-test-harness-wo-reports
+        with:
+          BUILD_AGENTS: "-a acapy-main -a dotnet"
+          TEST_AGENTS: "-d acapy-main -b dotnet"
+          TEST_SCOPE: "-t @AcceptanceTest -t ~@wip -t ~@ProofProposal -t ~@RFC0023 -t ~@DIDExchangeConnection -t ~@AIP20 -t ~@RFC0025"
+          REPORT_PROJECT: acapy-b-dotnet
+        continue-on-error: true
+      - name: run-send-gen-test-results-secure
+        uses: ./test-harness/actions/run-send-gen-test-results-secure
+        with:
+          REPORT_PROJECT: acapy-b-dotnet 
+          ADMIN_USER: ${{ secrets.AllureAdminUser }}
+          ADMIN_PW: ${{ secrets.AllureAdminPW }}

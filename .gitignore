@@ -1,0 +1,49 @@
+venv/
+__pycache__/
+
+aries-agent-test-harness.code-workspace
+**/.DS_Store
+
+# macOS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Agent log files
+.logs
+.log
+*.log
+
+# Env file used for debugging
+.env
+
+# build folders and files
+.build
+.srl
+
+# Reports
+reports/
+allure-report/
+allure-results/
+New-KGR-File.json
+aries-test-harness/allure/allure-results/environment.properties
+
+# Jekyll
+_site/
+.jekyll-metadata
+.env
+Gemfile.lock
+
+# ignore python env files
+env/
+.python-version
+
+# VSCode
+.vscode/settings.json
+
+#JetBrains
+.idea

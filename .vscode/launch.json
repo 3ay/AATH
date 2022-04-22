@@ -1,0 +1,118 @@
+{
+  // Use IntelliSense to find out which attributes exist for C# debugging
+  // Use hover for the description of the existing attributes
+  // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Backchannel - Acme",
+      "type": "docker",
+      "containerName": "acme_agent",
+      "request": "launch",
+      "serverReadyAction": {
+        "pattern": "NEVER_OPEN",
+        "uriFormat": "http://localhost:%s",
+        "action": "openExternally"
+      },
+      "preLaunchTask": "dotnet:debug:acme",
+      "removeContainerAfterDebug": true,
+      "netCore": {
+        "appProject": "${workspaceFolder}/aries-backchannels/dotnet/server/DotNet.Backchannel.csproj"
+      }
+    },
+    {
+      "name": ".NET Backchannel - Bob",
+      "type": "docker",
+      "containerName": "bob_agent",
+      "request": "launch",
+      "serverReadyAction": {
+        "pattern": "NEVER_OPEN",
+        "uriFormat": "http://localhost:%s",
+        "action": "openExternally"
+      },
+      "preLaunchTask": "dotnet:debug:bob",
+      "removeContainerAfterDebug": true,
+      "netCore": {
+        "appProject": "${workspaceFolder}/aries-backchannels/dotnet/server/DotNet.Backchannel.csproj"
+      }
+    },
+    {
+      "name": ".NET Backchannel - Faber",
+      "type": "docker",
+      "containerName": "faber_agent",
+      "request": "launch",
+      "serverReadyAction": {
+        "pattern": "NEVER_OPEN",
+        "uriFormat": "http://localhost:%s",
+        "action": "openExternally"
+      },
+      "preLaunchTask": "dotnet:debug:faber",
+      "removeContainerAfterDebug": true,
+      "netCore": {
+        "appProject": "${workspaceFolder}/aries-backchannels/dotnet/server/DotNet.Backchannel.csproj"
+      }
+    },
+    {
+      "name": ".NET Backchannel - Mallory",
+      "type": "docker",
+      "containerName": "mallory_agent",
+      "request": "launch",
+      "serverReadyAction": {
+        "pattern": "NEVER_OPEN",
+        "uriFormat": "http://localhost:%s",
+        "action": "openExternally"
+      },
+      "preLaunchTask": "dotnet:debug:mallory",
+      "removeContainerAfterDebug": true,
+      "netCore": {
+        "appProject": "${workspaceFolder}/aries-backchannels/dotnet/server/DotNet.Backchannel.csproj"
+      }
+    },
+    {
+        "name": "Python: Current File",
+        "type": "python",
+        "request": "launch",
+        "program": "${file}",
+        "console": "integratedTerminal",
+        "cwd": "${workspaceFolder}/aries-backchannels",
+        "args" : ["-p", "8020"],
+        "env": {
+            "LEDGER_URL": "http://localhost:9000"
+        },
+    },
+    {
+        "name": "Python: Behave current file",
+        "type": "python",
+        "request": "launch",
+        "module": "behave",
+        "console": "integratedTerminal",
+        "cwd": "${workspaceFolder}/aries-test-harness",
+        "args": [
+            "${file}",
+            "--tags=@T002-AIP10-RFC0037",
+            "-k",
+            "-D",
+            "Acme=http://0.0.0.0:8020",
+            "-D",
+            "Bob=http://0.0.0.0:8030",
+            "-D",
+            "Mallory=http://0.0.0.0:8040",
+            "-D",
+            "Faber=http://0.0.0.0:8050"
+        ]
+    },
+    {
+        "name": "Python: Remote Attach",
+        "type": "python",
+        "request": "attach",
+        "pathMappings": [
+            {
+                "localRoot": "${workspaceFolder}/aries-test-harness/aries-backchannels",
+                "remoteRoot": "/aries-backchannels"
+            } 
+        ],
+        "port": 5678,
+        "host": "127.0.0.1"
+    },
+  ]
+}
